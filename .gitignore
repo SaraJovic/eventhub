@@ -1,0 +1,29 @@
+# Maven
+target/
+*.jar
+*.war
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env files (osetljivi podaci)
+.env
+*.env
+
+# Build/Docker
+*.class
