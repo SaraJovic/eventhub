@@ -82,6 +82,10 @@ jobs:
           distribution: temurin
           cache: maven
 
+      - name: Build project for analysis
+        working-directory: user-service
+        run: mvn -f pom.xml clean compile -DskipTests
+
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
