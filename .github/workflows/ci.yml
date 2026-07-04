@@ -45,7 +45,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/user_db
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
-        run: mvn -f user-service/pom.xml clean verify
+        run: mvn -f user-service/pom.xml clean verify -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Upload test reports
         if: always()
@@ -88,7 +88,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/event_db
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
-        run: mvn -f pom.xml clean verify
+        run: mvn -f pom.xml clean verify -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Upload test reports
         if: always()
@@ -182,7 +182,7 @@ jobs:
         env:
           RABBITMQ_HOST: localhost
           RABBITMQ_PORT: 5672
-        run: mvn -f pom.xml clean verify
+        run: mvn -f pom.xml clean verify -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Upload test reports
         if: always()
@@ -208,7 +208,7 @@ jobs:
 
       - name: Build and test api-gateway
         working-directory: api-gateway
-        run: mvn -f pom.xml clean verify
+        run: mvn -f pom.xml clean verify -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Upload test reports
         if: always()
@@ -277,7 +277,8 @@ jobs:
           mvn -f user-service/pom.xml sonar:sonar \
             -Dsonar.projectKey=eventhub_user-service \
             -Dsonar.organization=sarajovic \
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Build event-service for analysis
         working-directory: event-service
@@ -291,7 +292,8 @@ jobs:
           mvn -f pom.xml sonar:sonar \
             -Dsonar.projectKey=eventhub_event-service \
             -Dsonar.organization=sarajovic \
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Build registration-service for analysis
         working-directory: registration-service
@@ -319,7 +321,8 @@ jobs:
           mvn -f pom.xml sonar:sonar \
             -Dsonar.projectKey=eventhub_notification-service \
             -Dsonar.organization=sarajovic \
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Build api-gateway for analysis
         working-directory: api-gateway
@@ -333,4 +336,5 @@ jobs:
           mvn -f pom.xml sonar:sonar \
             -Dsonar.projectKey=eventhub_api-gateway \
             -Dsonar.organization=sarajovic \
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
