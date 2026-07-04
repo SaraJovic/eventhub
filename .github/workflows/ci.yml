@@ -240,6 +240,10 @@ jobs:
         run: |
           docker build -t eventhub/notification-service:${{ github.sha }} ./notification-service
 
+      - name: Build registration-service Docker image
+        run: |
+          docker build -t eventhub/registration-service:${{ github.sha }} ./registration-service
+
       - name: Build api-gateway Docker image
         run: |
           docker build -t eventhub/api-gateway:${{ github.sha }} ./api-gateway
