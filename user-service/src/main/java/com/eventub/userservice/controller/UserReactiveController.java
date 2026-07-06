@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserReactiveController {
 
     private final UserService userService;
