@@ -29,7 +29,7 @@ class UserControllerIntegrationTest {
 
     @Test
     void createUser_returns201() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"Ana Jovic\",\"email\":\"ana@example.com\"}"))
                 .andExpect(status().isCreated())
@@ -41,12 +41,12 @@ class UserControllerIntegrationTest {
 
     @Test
     void createUser_duplicateEmail_returns409() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"Ana Jovic\",\"email\":\"dup@example.com\"}"))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"Ana Jovic 2\",\"email\":\"dup@example.com\"}"))
                 .andExpect(status().isConflict())
@@ -55,7 +55,7 @@ class UserControllerIntegrationTest {
 
     @Test
     void createUser_invalidBody_returns400() throws Exception {
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"\",\"email\":\"not-an-email\"}"))
                 .andExpect(status().isBadRequest())
@@ -64,14 +64,14 @@ class UserControllerIntegrationTest {
 
     @Test
     void getAllUsers_returnsEmptyList() throws Exception {
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
     }
 
     @Test
     void getUserById_notFound_returns404() throws Exception {
-        mockMvc.perform(get("/users/999"))
+        mockMvc.perform(get("/api/users/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").exists());
     }
@@ -79,7 +79,7 @@ class UserControllerIntegrationTest {
     @Test
     void fullCrudFlow() throws Exception {
         // Create
-        String createResponse = mockMvc.perform(post("/users")
+        String createResponse = mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"Test User\",\"email\":\"test@example.com\"}"))
                 .andExpect(status().isCreated())
@@ -90,28 +90,28 @@ class UserControllerIntegrationTest {
         long id = Long.parseLong(idStr);
 
         // Get by id
-        mockMvc.perform(get("/users/" + id))
+        mockMvc.perform(get("/api/users/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("test@example.com"));
 
         // Update
-        mockMvc.perform(put("/users/" + id)
+        mockMvc.perform(put("/api/users/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"fullName\":\"Updated User\",\"email\":\"updated@example.com\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value("Updated User"));
 
         // Get all
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].email").value("updated@example.com"));
 
         // Delete
-        mockMvc.perform(delete("/users/" + id))
+        mockMvc.perform(delete("/api/users/" + id))
                 .andExpect(status().isNoContent());
 
         // Confirm deleted
-        mockMvc.perform(get("/users/" + id))
+        mockMvc.perform(get("/api/users/" + id))
                 .andExpect(status().isNotFound());
     }
 }

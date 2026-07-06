@@ -38,7 +38,7 @@ class UserReactiveControllerTest {
     void streamUsers_emptyDatabase_completesWithNoElements() {
         StepVerifier.create(
                         webTestClient.get()
-                                .uri("/users/stream")
+                                .uri("/api/users/stream")
                                 .accept(MediaType.TEXT_EVENT_STREAM)
                                 .exchange()
                                 .expectStatus().isOk()
@@ -58,7 +58,7 @@ class UserReactiveControllerTest {
 
         StepVerifier.create(
                         webTestClient.get()
-                                .uri("/users/stream")
+                                .uri("/api/users/stream")
                                 .accept(MediaType.TEXT_EVENT_STREAM)
                                 .exchange()
                                 .expectStatus().isOk()
