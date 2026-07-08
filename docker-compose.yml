@@ -182,8 +182,19 @@ services:
       - "3100:3100"
     volumes:
       - ./monitoring/loki-config.yml:/etc/loki/local-config.yaml
-      - loki_data:/loki
+      - loki_data:/tmp/loki
     command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - eventhub-network
+
+  promtail:
+    image: grafana/promtail:3.0.0
+    volumes:
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
     networks:
       - eventhub-network
 
@@ -195,7 +206,7 @@ services:
       - "4318:4318"
     volumes:
       - ./monitoring/tempo-config.yml:/etc/tempo.yaml
-      - tempo_data:/tmp/tempo
+      - tempo_data:/var/tempo
     command: -config.file=/etc/tempo.yaml
     networks:
       - eventhub-network
