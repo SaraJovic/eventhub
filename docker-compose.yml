@@ -28,7 +28,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
       OTEL_SERVICE_NAME: user-service
     depends_on:
       postgres:
@@ -52,7 +52,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
       OTEL_SERVICE_NAME: event-service
     depends_on:
       postgres:
@@ -97,7 +97,7 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-guest}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
       OTEL_SERVICE_NAME: registration-service
     depends_on:
       postgres:
@@ -123,7 +123,7 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-guest}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
       OTEL_SERVICE_NAME: notification-service
     depends_on:
       rabbitmq:
@@ -147,7 +147,7 @@ services:
       EVENT_SERVICE_URL: http://event-service:8082
       REGISTRATION_SERVICE_URL: http://registration-service:8083
       NOTIFICATION_SERVICE_URL: http://notification-service:8084
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318/v1/traces
       OTEL_SERVICE_NAME: api-gateway
     depends_on:
       user-service:
