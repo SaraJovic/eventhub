@@ -1,0 +1,49 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: docker
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+
+    relabel_configs:
+      # Only keep containers that belong to this docker-compose project
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_project']
+        regex: '^$'
+        action: drop
+
+      # job label = docker-compose service name, matching prometheus.yml job_name values
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        regex: '^$'
+        action: drop
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: 'job'
+
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: 'service_name'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
+
+    pipeline_stages:
+      # Logs are structured JSON (logstash-logback-encoder); extract fields for
+      # filtering in Grafana and for linking to Tempo traces via traceId.
+      - json:
+          expressions:
+            level: level
+            traceId: traceId
+            spanId: spanId
+
+      # Promote only "level" to an indexed label (low cardinality).
+      # traceId/spanId stay as extracted fields (high cardinality - not labels)
+      # but remain queryable/filterable and visible in Grafana's log detail view.
+      - labels:
+          level:
